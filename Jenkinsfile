@@ -33,7 +33,7 @@ pipeline {
               advancedProperties: '', \
               enableDebugLogging: false, \
               failBuildOnNetworkError: false, \
-              iqApplication: selectedApplication('angular_app'), \
+              iqApplication: selectedApplication('angular_app-ci-dir'), \
               iqScanPatterns: [[scanPattern: '.']], 
               iqInstanceId: 'nexusiq', \
               iqStage: 'build', \
@@ -49,7 +49,7 @@ pipeline {
               advancedProperties: '', \
               enableDebugLogging: false, \
               failBuildOnNetworkError: false, \
-              iqApplication: selectedApplication('angular_app'), \
+              iqApplication: selectedApplication('angular_app-ci-sbom'), \
               iqScanPatterns: [[scanPattern: "${SBOM_FILE}"]], 
               iqInstanceId: 'nexusiq', \
               iqStage: 'build', \
