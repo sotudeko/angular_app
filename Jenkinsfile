@@ -21,21 +21,18 @@ pipeline {
     }
 
     stage('Nexus IQ Scan') {
-        steps {
-              script{
-          
-              try {
-                  def policyEvaluation = nexusPolicyEvaluation advancedProperties: '', enableDebugLogging: false, failBuildOnNetworkError: false, iqApplication: selectedApplication('angular_app'), iqInstanceId: 'nexusiq', iqStage: 'build', jobCredentialsId: 'admin'
-                  echo "Nexus IQ scan succeeded: ${policyEvaluation.applicationCompositionReportUrl}"
-                  IQ_SCAN_URL = "${policyEvaluation.applicationCompositionReportUrl}"
-              } 
-              catch (error) {
-                  def policyEvaluation = error.policyEvaluation
-                  echo "Nexus IQ scan vulnerabilities detected', ${policyEvaluation.applicationCompositionReportUrl}"
-                  throw error
-              }
-          }
+      steps {
+        script {
+            nexusPolicyEvaluation 
+              advancedProperties: '', 
+              enableDebugLogging: false, 
+              failBuildOnNetworkError: false, 
+              iqApplication: selectedApplication('angular_app'), 
+              iqInstanceId: 'nexusiq', 
+              iqStage: 'build', 
+              jobCredentialsId: 'admin'
         }
+      }
     }
 
   }
