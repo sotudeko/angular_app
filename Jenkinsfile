@@ -23,7 +23,7 @@ pipeline {
     stage('Nexus IQ Scan') {
       steps {
         script {
-            nexusPolicyEvaluation advancedProperties: '', enableDebugLogging: false, failBuildOnNetworkError: false, iqApplication: selectedApplication('angular_app'), iqInstanceId: 'nexusiq', iqStage: 'build', jobCredentialsId: 'admin'
+            nexusPolicyEvaluation advancedProperties: '', enableDebugLogging: false, failBuildOnNetworkError: false, iqApplication: selectedApplication('angular_app'), iqInstanceId: 'nexusiq', iqStage: 'build', jobCredentialsId: 'Sonatype'
         }
       }
     }
