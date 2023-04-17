@@ -24,7 +24,6 @@ pipeline {
       steps {
         script {
             nexusPolicyEvaluation 
-              advancedProperties: '', 
               enableDebugLogging: false, 
               failBuildOnNetworkError: false, 
               iqApplication: selectedApplication('angular_app'), 
