@@ -20,11 +20,40 @@ pipeline {
       }
     }
 
-    stage('Nexus IQ Scan') {
+    stage('Directory listing') {
+      steps {
+          sh 'ls -lrt'
+      }
+    }
+
+    stage('Nexus IQ Scan (directory)') {
       steps {
         script {
             nexusPolicyEvaluation \
-              advancedProperties: '', enableDebugLogging: false, failBuildOnNetworkError: false, iqApplication: selectedApplication('angular_app'), iqInstanceId: 'nexusiq', iqStage: 'build', jobCredentialsId: 'Sonatype'
+              advancedProperties: '', \
+              enableDebugLogging: false, \
+              failBuildOnNetworkError: false, \
+              iqApplication: selectedApplication('angular_app'), \
+              iqScanPatterns: [[scanPattern: '.']], 
+              iqInstanceId: 'nexusiq', \
+              iqStage: 'build', \
+              jobCredentialsId: 'Sonatype'
+        }
+      }
+    }
+
+    stage('Nexus IQ Scan (SBOM)') {
+      steps {
+        script {
+            nexusPolicyEvaluation \
+              advancedProperties: '', \
+              enableDebugLogging: false, \
+              failBuildOnNetworkError: false, \
+              iqApplication: selectedApplication('angular_app'), \
+              iqScanPatterns: [[scanPattern: "${SBOM_FILE}"]], 
+              iqInstanceId: 'nexusiq', \
+              iqStage: 'build', \
+              jobCredentialsId: 'Sonatype'
         }
       }
     }
