@@ -1,9 +1,7 @@
 pipeline {
 
-  agent {
-        any
-    }
-
+  agent any
+        
   environment {
     SBOM_FILE = "bom.xml"
   }
