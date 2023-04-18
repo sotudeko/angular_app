@@ -42,21 +42,21 @@ pipeline {
       }
     }
 
-    // stage('Nexus IQ Scan (SBOM)') {
-    //   steps {
-    //     script {
-    //         nexusPolicyEvaluation \
-    //           advancedProperties: '', \
-    //           enableDebugLogging: false, \
-    //           failBuildOnNetworkError: false, \
-    //           iqApplication: selectedApplication('angular_app-ci-sbom'), \
-    //           iqScanPatterns: [[scanPattern: "${SBOM_FILE}"]], 
-    //           iqInstanceId: 'nexusiq', \
-    //           iqStage: 'build', \
-    //           jobCredentialsId: 'Sonatype'
-    //     }
-    //   }
-    // }
+    stage('Nexus IQ Scan (SBOM)') {
+      steps {
+        script {
+            nexusPolicyEvaluation \
+              advancedProperties: '', \
+              enableDebugLogging: false, \
+              failBuildOnNetworkError: false, \
+              iqApplication: selectedApplication('angular_app-ci-sbom'), \
+              iqScanPatterns: [[scanPattern: "${SBOM_FILE}"]], 
+              iqInstanceId: 'nexusiq', \
+              iqStage: 'build', \
+              jobCredentialsId: 'Sonatype'
+        }
+      }
+    }
 
   }
 }   
