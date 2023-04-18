@@ -26,8 +26,6 @@ pipeline {
       }
     }
 
-   
-
     stage('Nexus IQ Scan (directory)') {
       steps {
         script {
@@ -36,7 +34,7 @@ pipeline {
               enableDebugLogging: false, \
               failBuildOnNetworkError: false, \
               iqApplication: selectedApplication('angapp-ci-dir'), \
-              iqScanPatterns: [[scanPattern: '**/*' ]],
+              iqScanPatterns: [[scanPattern: '**/*' ], [scanPattern: '**/package.json'],, [scanPattern: '**/package-lock.json'],],
               iqInstanceId: 'nexusiq', \
               iqStage: 'build', \
               jobCredentialsId: 'Sonatype'
