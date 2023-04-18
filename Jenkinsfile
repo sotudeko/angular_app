@@ -26,6 +26,12 @@ pipeline {
       }
     }
 
+    stage('Nexus IQ CLI scan'){
+      steps {
+        sh '/opt/nxiq/nexus-iq-cli -s http://localhost:8070 -a admin:admin123 -i angular_app-ci-cli .'
+      }
+    }
+
     stage('Nexus IQ Scan (directory)') {
       steps {
         script {
