@@ -8,6 +8,13 @@ pipeline {
 
   stages {
 
+    stage ('Clean') {
+      steps {
+        script {
+          cleanWs deleteDirs: true, patterns: [[pattern: 'node_modules', type: 'INCLUDE'], [pattern: 'package-lock.json', type: 'INCLUDE']]
+        }
+      }
+    }
     stage('Install dependencies') {
       steps {
         sh 'npm install'
