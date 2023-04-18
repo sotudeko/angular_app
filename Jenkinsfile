@@ -28,7 +28,7 @@ pipeline {
 
     stage('Nexus IQ CLI scan'){
       steps {
-        sh '/opt/nxiq/nexus-iq-cli -s http://localhost:8070 -a admin:admin123 -i angular_app-ci-cli .'
+        sh 'java -jar /opt/nxiq/nexus-iq-cli -s http://localhost:8070 -a admin:admin123 -i angular_app-ci-cli .'
       }
     }
 
