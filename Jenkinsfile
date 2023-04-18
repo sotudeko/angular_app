@@ -26,11 +26,11 @@ pipeline {
       }
     }
 
-    stage('Nexus IQ CLI scan'){
-      steps {
-        sh 'java -jar /opt/nxiq/nexus-iq-cli -s http://localhost:8070 -a admin:admin123 -i angapp-ci-cli .'
-      }
-    }
+    // stage('Nexus IQ CLI scan'){
+    //   steps {
+    //     sh 'java -jar /opt/nxiq/nexus-iq-cli -s http://localhost:8070 -a admin:admin123 -i angapp-ci-cli .'
+    //   }
+    // }
 
     stage('Nexus IQ Scan (directory)') {
       steps {
