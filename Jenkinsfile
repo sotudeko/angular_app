@@ -3,7 +3,7 @@ pipeline {
   agent any
         
   environment {
-    SBOM_FILE = "bom.xml"
+    SBOM_FILE = "angapp-bom.xml"
   }
 
   stages {
@@ -21,9 +21,15 @@ pipeline {
       }
     }
 
+    stage('Install CycloneDX') {
+      steps {
+          sh 'npm install --save-dev @cyclonedx/cyclonedx-npm'
+      }
+    }
+
     stage('Generate SBOM') {
       steps {
-          sh 'npx auditjs@latest sbom > ${SBOM_FILE}'
+          sh "npx @cyclonedx/cyclonedx-npm --output-format XML --output-file ${SBOM_FILE}"
       }
     }
 
@@ -57,7 +63,7 @@ pipeline {
               enableDebugLogging: false, \
               failBuildOnNetworkError: false, \
               iqApplication: selectedApplication('angapp-ci-target'), \
-              iqScanPatterns: [[scanPattern: '**/npm-shrinkwrap.json' ], [scanPattern: '**/package-lock.json'], [scanPattern: '**/yarn.lock'], [scanPattern: '**/pnpm-lock.yaml']],
+              iqScanPatterns: [[scanPattern: '**/package.json' ], [scanPattern: '**/package-lock.json']],
               iqInstanceId: 'nexusiq', \
               iqStage: 'build', \
               jobCredentialsId: 'Sonatype'
@@ -83,7 +89,12 @@ pipeline {
 
     stage('Nexus IQ Scan (CLI)'){
       steps {
-        sh 'java -jar /opt/nxiq/nexus-iq-cli -t build -s http://localhost:8070 -a admin:admin123 -i angapp-ci-cli .'
+          sh "rm -v ${SBOM_FILE}"
+      }
+      post {
+        success {
+          sh 'java -jar /opt/nxiq/nexus-iq-cli -t build -s http://localhost:8070 -a admin:admin123 -i angapp-ci-cli .'
+        }
       }
     }
 
