@@ -55,15 +55,31 @@ pipeline {
       }
     }
 
-     stage('Nexus IQ Scan (target)') {
+     stage('Nexus IQ Scan (target package*.json)') {
       steps {
         script {
             nexusPolicyEvaluation \
               advancedProperties: '', \
               enableDebugLogging: false, \
               failBuildOnNetworkError: false, \
-              iqApplication: selectedApplication('angapp-ci-target'), \
+              iqApplication: selectedApplication('angapp-ci-target-pl'), \
               iqScanPatterns: [[scanPattern: '**/package.json' ], [scanPattern: '**/package-lock.json']],
+              iqInstanceId: 'nexusiq', \
+              iqStage: 'build', \
+              jobCredentialsId: 'Sonatype'
+        }
+      }
+    }
+
+    stage('Nexus IQ Scan (target package*.json + *.js)') {
+      steps {
+        script {
+            nexusPolicyEvaluation \
+              advancedProperties: '', \
+              enableDebugLogging: false, \
+              failBuildOnNetworkError: false, \
+              iqApplication: selectedApplication('angapp-ci-target-pljs'), \
+              iqScanPatterns: [[scanPattern: '**/package.json' ], [scanPattern: '**/package-lock.json'], [scanPattern: '**/*.js']]],
               iqInstanceId: 'nexusiq', \
               iqStage: 'build', \
               jobCredentialsId: 'Sonatype'
@@ -90,7 +106,7 @@ pipeline {
     stage('Nexus IQ Scan (CLI)'){
       steps {
           sh "rm -v ${SBOM_FILE}"
-          sh 'java -jar /opt/nxiq/nexus-iq-cli -t build -s http://localhost:8070 -a admin:admin123 -i angapp-ci-cli .'
+          sh 'java -jar /opt/nxiq/nexus-iq-cli --ignore-scanning-errors -t build -s http://localhost:8070 -a admin:admin123 -i angapp-ci-cli .'
       }
     }
   }
