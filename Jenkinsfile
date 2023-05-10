@@ -79,7 +79,7 @@ pipeline {
               enableDebugLogging: false, \
               failBuildOnNetworkError: false, \
               iqApplication: selectedApplication('angapp-ci-target-pljs'), \
-              iqScanPatterns: [[scanPattern: '**/package.json' ], [scanPattern: '**/package-lock.json'], [scanPattern: '**/*.js']]],
+              iqScanPatterns: [[scanPattern: '**/package.json' ], [scanPattern: '**/package-lock.json'], [scanPattern: '**/*.js']],
               iqInstanceId: 'nexusiq', \
               iqStage: 'build', \
               jobCredentialsId: 'Sonatype'
