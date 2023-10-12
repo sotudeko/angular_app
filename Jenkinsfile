@@ -21,18 +21,6 @@ pipeline {
       }
     }
 
-    stage('Install CycloneDX') {
-      steps {
-          sh 'npm install --save-dev @cyclonedx/cyclonedx-npm'
-      }
-    }
-
-    stage('Generate SBOM') {
-      steps {
-          sh "npx @cyclonedx/cyclonedx-npm --output-format XML --output-file ${SBOM_FILE}"
-      }
-    }
-
     stage('Directory listing') {
       steps {
           sh 'ls -lrt'
@@ -46,7 +34,7 @@ pipeline {
               advancedProperties: '', \
               enableDebugLogging: false, \
               failBuildOnNetworkError: false, \
-              iqApplication: selectedApplication('angapp-ci-dir'), \
+              iqApplication: selectedApplication('angapp-ci-dir2'), \
               iqScanPatterns: [[scanPattern: '**/*' ]],
               iqInstanceId: 'nexusiq', \
               iqStage: 'build', \
@@ -55,59 +43,4 @@ pipeline {
       }
     }
 
-     stage('Nexus IQ Scan (target package*.json)') {
-      steps {
-        script {
-            nexusPolicyEvaluation \
-              advancedProperties: '', \
-              enableDebugLogging: false, \
-              failBuildOnNetworkError: false, \
-              iqApplication: selectedApplication('angapp-ci-target-pl'), \
-              iqScanPatterns: [[scanPattern: '**/package.json' ], [scanPattern: '**/package-lock.json']],
-              iqInstanceId: 'nexusiq', \
-              iqStage: 'build', \
-              jobCredentialsId: 'Sonatype'
-        }
-      }
-    }
-
-    stage('Nexus IQ Scan (target package*.json + *.js)') {
-      steps {
-        script {
-            nexusPolicyEvaluation \
-              advancedProperties: '', \
-              enableDebugLogging: false, \
-              failBuildOnNetworkError: false, \
-              iqApplication: selectedApplication('angapp-ci-target-pljs'), \
-              iqScanPatterns: [[scanPattern: '**/package.json' ], [scanPattern: '**/package-lock.json'], [scanPattern: '**/*.js']],
-              iqInstanceId: 'nexusiq', \
-              iqStage: 'build', \
-              jobCredentialsId: 'Sonatype'
-        }
-      }
-    }
-
-    stage('Nexus IQ Scan (SBOM)') {
-      steps {
-        script {
-            nexusPolicyEvaluation \
-              advancedProperties: '', \
-              enableDebugLogging: false, \
-              failBuildOnNetworkError: false, \
-              iqApplication: selectedApplication('angapp-ci-sbom'), \
-              iqScanPatterns: [[scanPattern: "${SBOM_FILE}"]], 
-              iqInstanceId: 'nexusiq', \
-              iqStage: 'build', \
-              jobCredentialsId: 'Sonatype'
-        }
-      }
-    }
-
-    stage('Nexus IQ Scan (CLI)'){
-      steps {
-          sh "rm -v ${SBOM_FILE}"
-          sh 'java -jar /opt/nxiq/nexus-iq-cli --ignore-scanning-errors -t build -s http://localhost:8070 -a admin:admin123 -i angapp-ci-cli .'
-      }
-    }
-  }
 }   
