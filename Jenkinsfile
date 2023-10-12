@@ -17,7 +17,7 @@ pipeline {
     }
     stage('Install dependencies') {
       steps {
-        sh 'npm install --production'
+        sh 'npm install --omit=dev'
       }
     }
 
